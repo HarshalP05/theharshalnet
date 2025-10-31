@@ -2,50 +2,46 @@ import { useEffect, useState } from "react";
 
 export default function Navbar() {
   return (
-    <nav className="fixed top-0 left-0 w-full bg-black/60 backdrop-blur-md border-b border-blue-500/20 z-50">
-      <div className="max-w-7xl mx-auto flex items-center justify-between p-4">
+    <nav className="navbar">
+      <div className="container flex items-center justify-between">
         
         {/* Logo + Name */}
         <a href="/" className="flex items-center space-x-3">
           <img
             src="/logo.png"
             alt="HP Logo"
-            className="w-12 h-12 drop-shadow-[0_0_10px_#00ffcc] hover:drop-shadow-[0_0_20px_#00ffcc] transition-all"
+            className="nav-logo"
           />
-          <span className="text-xl font-bold text-blue-400 hidden sm:block tracking-wide">
+          <span className="text-xl font-bold hidden sm:block tracking-wide" style={{color:"var(--muted)"}}>
             Harshal Patil
           </span>
         </a>
 
         {/* Desktop Navigation */}
-        <div className="hidden sm:flex items-center space-x-6 text-gray-300 font-medium">
+        <div className="hidden sm:flex items-center space-x-6 font-medium" style={{color:"var(--muted)"}}>
           <a
             href="/projects"
-            className="hover:text-[#00ffcc] transition-all duration-200 hover:drop-shadow-[0_0_8px_#00ffcc]"
+            className="hover:text-cyan-300 transition-colors"
           >
             Projects
           </a>
 
           <a
             href="/achievements"
-            className="hover:text-[#00ffcc] transition-all duration-200 hover:drop-shadow-[0_0_8px_#00ffcc]"
+            className="hover:text-cyan-300 transition-colors"
           >
             Achievements
           </a>
 
           <a
             href="/contact"
-            className="hover:text-[#00ffcc] transition-all duration-200 hover:drop-shadow-[0_0_8px_#00ffcc]"
+            className="hover:text-cyan-300 transition-colors"
           >
             Contact
           </a>
 
           {/* NEW Resume Link */}
-          <a
-            href="/resume"
-            className="px-4 py-2 rounded-lg bg-[#00ffcc]/10 border border-[#00ffcc]/30 text-[#00ffcc] 
-                       hover:bg-[#00ffcc]/20 hover:shadow-[0_0_15px_#00ffcc] transition-all duration-300"
-          >
+          <a href="/resume" className="btn btn-outline">
             Resume
           </a>
         </div>
@@ -100,14 +96,11 @@ function MobileMenu() {
           open ? "scale-y-100 opacity-100" : "scale-y-95 opacity-0 pointer-events-none"
         } transition-transform duration-200 ease-out`}
       >
-        <div className="px-4 py-3 space-y-2 text-gray-200">
+        <div className="px-4 py-3 space-y-2" style={{color:"var(--muted)"}}>
           <a href="/projects" className="block px-3 py-2 rounded-md hover:bg-white/10">Projects</a>
           <a href="/achievements" className="block px-3 py-2 rounded-md hover:bg-white/10">Achievements</a>
           <a href="/contact" className="block px-3 py-2 rounded-md hover:bg-white/10">Contact</a>
-          <a
-            href="/resume"
-            className="block px-3 py-2 rounded-md bg-[#00ffcc]/10 border border-[#00ffcc]/30 text-[#00ffcc] hover:bg-[#00ffcc]/20"
-          >
+          <a href="/resume" className="block px-3 py-2 rounded-md btn-outline" style={{display:"block", textAlign:"center"}}>
             Resume
           </a>
         </div>

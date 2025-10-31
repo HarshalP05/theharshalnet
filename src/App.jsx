@@ -9,9 +9,9 @@ import Achievements from "./components/Achievements"; // optional placeholder
 function App() {
   return (
     <Router>
-      <div className="text-white font-sans bg-gradient-to-br from-[#000c0e] via-[#001a24] to-[#001f2b] min-h-screen">
+      <div className="text-white font-sans min-h-screen bg-transparent pt-[calc(var(--nav-height)+4px)]">
         <Navbar />
-        <div className="pt-24"> {/* adds spacing below fixed navbar */}
+        <div>
           <Routes>
             <Route path="/" element={<Hero />} />
             <Route path="/projects" element={<Projects />} />

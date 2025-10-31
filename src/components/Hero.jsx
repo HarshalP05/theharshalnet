@@ -5,22 +5,41 @@ import PcbBackground from "../lib/PcbBackground.jsx"; // ✅ Animated PCB backgr
 
 export default function Hero() {
   return (
-  <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-transparent">
+  <section className="relative min-h-[calc(100svh-(var(--nav-height)+2px))] flex items-center justify-center overflow-hidden bg-transparent pt-0">
       {/* ===== PCB Animated Background ===== */}
       <PcbBackground />
 
       {/* ===== Main Content ===== */}
-      <div className="relative z-10 grid md:grid-cols-2 gap-10 items-center p-8 md:p-10 max-w-7xl w-full">
+  <div className="relative z-20 grid md:grid-cols-2 gap-5 md:gap-7 items-center px-5 md:px-7 pt-1 md:pt-1 pb-5 md:pb-7 max-w-6xl w-full">
         {/* === Left Content === */}
         <div className="space-y-6">
-          <h1 className="text-5xl md:text-6xl font-bold text-white leading-tight drop-shadow-[0_0_15px_rgba(0,255,200,0.25)]">
+          {/* Profile Photo (circular) */}
+          <div className="flex items-center gap-3">
+            <div className="relative w-28 h-28 sm:w-32 sm:h-32 md:w-36 md:h-36 lg:w-40 lg:h-40 rounded-full overflow-hidden ring-2 ring-teal-400/40 shadow-[0_0_20px_rgba(0,255,200,0.12)] bg-[#041122] flex items-center justify-center">
+  <img
+    src="/profile.jpg"
+    alt="Harshal Patil"
+    className="w-full h-full object-cover object-[50%_20%] scale-[1.62] transition-transform duration-300"
+    style={{ transformOrigin: "center" }}
+    loading="eager"
+  />
+</div>
+
+
+          </div>
+          <h1 className="text-[2.1rem] md:text-[2.8rem] font-bold leading-tight tracking-tight" style={{color:"var(--text)"}}>
             Hello, I'm{" "}
-            <span className="bg-clip-text text-transparent bg-linear-to-r from-teal-300 to-cyan-400">
+            <span className="bg-clip-text text-transparent" style={{backgroundImage:"linear-gradient(90deg, #4fd1c5, #63b3ed)"}}>
               Harshal Patil
             </span>
           </h1>
 
-          <p className="text-gray-300 text-lg leading-relaxed max-w-xl">
+          {/* Subtle tagline for clarity and vibe */}
+          <p className="text-[0.98rem] md:text-[1.05rem] tracking-wide" style={{color:"var(--muted)"}}>
+            Embedded Systems • Edge AI • Full‑Stack Engineering
+          </p>
+
+          <p className="text-[1.02rem] md:text-[1.08rem] leading-relaxed max-w-[46ch]" style={{color:"var(--muted)"}}>
             I build intelligent systems that blend{" "}
             <span className="text-teal-300">Embedded Hardware</span>,{" "}
             <span className="text-cyan-300">Edge AI</span>, and{" "}
@@ -30,26 +49,27 @@ export default function Hero() {
           </p>
 
           {/* === Buttons === */}
-          <div className="flex flex-wrap gap-4 mt-8">
+          <div className="flex flex-wrap gap-3 mt-6">
             <a
               href="/projects"
-              className="bg-teal-600 hover:bg-teal-500 text-white px-6 py-3 rounded-xl shadow-lg shadow-teal-400/30 transition"
+              className="btn btn-primary btn-lg"
             >
               View Projects
             </a>
             <a
               href="/contact"
-              className="border border-teal-400 hover:bg-teal-400 hover:text-black px-6 py-3 rounded-xl transition"
+              className="btn btn-outline btn-lg"
             >
               Contact Me
             </a>
           </div>
 
           {/* === Social Links === */}
-          <div className="flex space-x-6 mt-6">
+          <div className="flex space-x-5 mt-5">
             <a
               href="mailto:harshalmpatil2005@gmail.com"
-              className="text-gray-400 hover:text-teal-400 transition"
+              className="transition"
+              style={{color:"var(--muted)"}}
               title="Email"
             >
               <Mail size={26} />
@@ -58,7 +78,8 @@ export default function Hero() {
               href="https://github.com/HarshalP05"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-gray-400 hover:text-teal-400 transition"
+              className="transition"
+              style={{color:"var(--muted)"}}
               title="GitHub"
             >
               <Github size={26} />
@@ -67,7 +88,8 @@ export default function Hero() {
               href="https://linkedin.com/in/harshalp05"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-gray-400 hover:text-teal-400 transition"
+              className="transition"
+              style={{color:"var(--muted)"}}
               title="LinkedIn"
             >
               <Linkedin size={26} />
@@ -75,7 +97,7 @@ export default function Hero() {
           </div>
 
           {/* === Tagline === */}
-          <p className="mt-4 text-sm text-gray-400">
+          <p className="mt-3 text-[0.92rem]" style={{color:"var(--muted)"}}>
             IEEE SPS Secretary | Edge-AI Research | IoT & Cloud Integrator
           </p>
         </div>
