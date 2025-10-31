@@ -33,6 +33,7 @@ export default function PcbBackground() {
   const canvasRef = useRef(null);
   const pathsRef = useRef([]);
   const lastSize = useRef({ w: 0, h: 0 });
+  const nodesRef = useRef([]); // precomputed node positions
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -58,24 +59,52 @@ export default function PcbBackground() {
     setCanvasSize();
 
     // --- PCB grid and connection paths ---
-    const gridSize = 72;
-    const dotSize = 5;
+    const gridSize = 76; // slightly larger to reduce node/segment count
+    const dotSize = 4.5;
     const gridX = Math.ceil(width / gridSize) + 3;
     const gridY = Math.ceil(height / gridSize) + 3;
 
+    // Precompute node pixel positions for faster draws
+    const nodes = [];
+    for (let x = 0; x < gridX; x++) {
+      for (let y = 0; y < gridY; y++) {
+        nodes.push({ px: x * gridSize, py: y * gridSize });
+      }
+    }
+    nodesRef.current = nodes;
+
     // Generate trace paths
-    pathsRef.current = createPCBPaths(gridX, gridY, gridSize, Math.floor(gridX * gridY * 0.25));
+    pathsRef.current = createPCBPaths(
+      gridX,
+      gridY,
+      gridSize,
+      Math.floor(gridX * gridY * 0.22) // slight reduction for perf
+    );
 
     // --- Animation State ---
     let animationFrameId;
     const start = performance.now();
 
+    // Respect reduced motion preference
+    const prefersReduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    // Pause when tab hidden
+    let isActive = true;
+    const onVisibility = () => { isActive = document.visibilityState === "visible"; if (isActive) animationFrameId = requestAnimationFrame(drawPCB); };
+    document.addEventListener("visibilitychange", onVisibility);
+
     function drawPCB() {
+      if (!isActive) return; // don't draw when inactive
+
       ctx.clearRect(0, 0, width, height);
 
       // --- Draw Connections (traces) ---
-      const t = (performance.now() - start) / 1000;
-      const pathSpeed = 4; // segments/sec
+      const now = performance.now();
+      const t = (now - start) / 1000;
+      const pathSpeed = prefersReduced ? 1 : 4; // segments/sec
+
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
 
       for (const path of pathsRef.current) {
         // Animate the path being drawn progressively
@@ -89,8 +118,8 @@ export default function PcbBackground() {
           const x2 = b.x * gridSize;
           const y2 = b.y * gridSize;
           // Soft shimmer
-          const shimmer = 0.4 + 0.6 * Math.sin((x1 + y1 + t * 80) * 0.003 + t * 1.6);
-          ctx.strokeStyle = `rgba(44, 227, 103, ${0.18 + shimmer * 0.20})`;
+          const shimmer = prefersReduced ? 0.6 : 0.4 + 0.6 * Math.sin((x1 + y1 + t * 80) * 0.003 + t * 1.6);
+          ctx.strokeStyle = `rgba(44, 227, 103, ${0.16 + shimmer * 0.18})`;
           ctx.lineWidth = 3;
           ctx.beginPath();
           ctx.moveTo(x1, y1);
@@ -105,8 +134,8 @@ export default function PcbBackground() {
           const y1 = prev.y * gridSize;
           const x2 = head.x * gridSize;
           const y2 = head.y * gridSize;
-          ctx.strokeStyle = `rgba(210, 252, 125, 0.24)`;
-          ctx.lineWidth = 4;
+          ctx.strokeStyle = `rgba(210, 252, 125, ${prefersReduced ? 0.18 : 0.24})`;
+          ctx.lineWidth = 3.8;
           ctx.beginPath();
           ctx.moveTo(x1, y1);
           ctx.lineTo(x2, y2);
@@ -115,24 +144,25 @@ export default function PcbBackground() {
       }
 
       // --- Draw Nodes (pads) ---
-      for (let x = 0; x < gridX; x++) {
-        for (let y = 0; y < gridY; y++) {
-          const px = x * gridSize;
-          const py = y * gridSize;
-          const shimmer = 0.6 + 0.4 * Math.sin((px + py) * 0.014 + t * 2.4);
-          const alpha = 0.13 + shimmer * 0.18;
-
-          ctx.fillStyle = `rgba(56, 189, 248, ${alpha})`;
-          ctx.beginPath();
-          ctx.arc(px, py, dotSize, 0, 2 * Math.PI);
-          ctx.fill();
-
-          ctx.fillStyle = `rgba(255, 230, 104, ${alpha * 0.5})`;
-          ctx.beginPath();
-          ctx.arc(px, py, dotSize * 0.5, 0, 2 * Math.PI);
-          ctx.fill();
-        }
+      const nodePulse = prefersReduced ? 0.8 : (0.6 + 0.4 * Math.sin(t * 2.2));
+      const outerAlpha = 0.14 + nodePulse * 0.16;
+      const innerAlpha = (outerAlpha * 0.5);
+      ctx.beginPath(); // batch path to reduce state churn
+      for (let i = 0; i < nodesRef.current.length; i++) {
+        const { px, py } = nodesRef.current[i];
+        ctx.fillStyle = `rgba(56, 189, 248, ${outerAlpha})`;
+        ctx.moveTo(px + dotSize, py);
+        ctx.arc(px, py, dotSize, 0, 2 * Math.PI);
       }
+      ctx.fill();
+      ctx.beginPath();
+      for (let i = 0; i < nodesRef.current.length; i++) {
+        const { px, py } = nodesRef.current[i];
+        ctx.fillStyle = `rgba(255, 230, 104, ${innerAlpha})`;
+        ctx.moveTo(px + dotSize * 0.5, py);
+        ctx.arc(px, py, dotSize * 0.5, 0, 2 * Math.PI);
+      }
+      ctx.fill();
 
       animationFrameId = requestAnimationFrame(drawPCB);
     }
@@ -145,7 +175,16 @@ export default function PcbBackground() {
       setCanvasSize();
       const gridX = Math.ceil(width / gridSize) + 3;
       const gridY = Math.ceil(height / gridSize) + 3;
-      pathsRef.current = createPCBPaths(gridX, gridY, gridSize, Math.floor(gridX * gridY * 0.25));
+      // recompute nodes
+      const nodes = [];
+      for (let x = 0; x < gridX; x++) {
+        for (let y = 0; y < gridY; y++) {
+          nodes.push({ px: x * gridSize, py: y * gridSize });
+        }
+      }
+      nodesRef.current = nodes;
+      // regenerate paths (slightly fewer for perf)
+      pathsRef.current = createPCBPaths(gridX, gridY, gridSize, Math.floor(gridX * gridY * 0.22));
     };
     window.addEventListener("resize", handleResize);
 
@@ -153,6 +192,7 @@ export default function PcbBackground() {
     return () => {
       cancelAnimationFrame(animationFrameId);
       window.removeEventListener("resize", handleResize);
+      document.removeEventListener("visibilitychange", onVisibility);
     };
   }, []);
 

@@ -5,7 +5,7 @@ import PcbBackground from "../lib/PcbBackground.jsx"; // ✅ Animated PCB backgr
 
 export default function Hero() {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-[#000c0e] via-[#001a24] to-[#001e33]">
+  <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-transparent">
       {/* ===== PCB Animated Background ===== */}
       <PcbBackground />
 
@@ -15,7 +15,7 @@ export default function Hero() {
         <div className="space-y-6">
           <h1 className="text-5xl md:text-6xl font-bold text-white leading-tight drop-shadow-[0_0_15px_rgba(0,255,200,0.25)]">
             Hello, I'm{" "}
-            <span className="text-teal-400 bg-clip-text text-transparent bg-gradient-to-r from-teal-300 to-cyan-400">
+            <span className="bg-clip-text text-transparent bg-linear-to-r from-teal-300 to-cyan-400">
               Harshal Patil
             </span>
           </h1>
