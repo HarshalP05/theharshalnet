@@ -1,16 +1,19 @@
 import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls, useGLTF } from "@react-three/drei";
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useMemo } from "react";
 import * as THREE from "three";
+import { supabase } from "../lib/supabaseClient";
 
-function ESP32Model() {
-  const { scene } = useGLTF("/models/ESP.glb");
+function ESP32Model({ modelUrl }) {
+  const { scene } = useGLTF(modelUrl, true);
   const ref = useRef();
   const [angle, setAngle] = useState(0);
   const [ledIntensity, setLedIntensity] = useState(0);
 
   useEffect(() => {
-    // Auto center and scale model
+    if (!scene) return;
+
+    // Auto center & scale
     const box = new THREE.Box3().setFromObject(scene);
     const size = new THREE.Vector3();
     box.getSize(size);
@@ -18,15 +21,13 @@ function ESP32Model() {
     box.getCenter(center);
     scene.position.sub(center);
 
-    // Auto scale to fit nicely
     const maxDim = Math.max(size.x, size.y, size.z);
     const scaleFactor = 2.5 / maxDim;
     scene.scale.setScalar(scaleFactor);
 
-    // Rotate 180° to show top (chip) facing camera
-    
-    scene.rotation.z =45;
-    scene.rotation.y = 90;
+    // Adjust orientation
+    scene.rotation.z = 45 * (Math.PI / 180);
+    scene.rotation.y = 90 * (Math.PI / 180);
   }, [scene]);
 
   useFrame((state, delta) => {
@@ -54,6 +55,33 @@ function ESP32Model() {
 }
 
 export default function ModelCanvas() {
+  const [modelUrl, setModelUrl] = useState(null);
+
+  // ✅ Fetch signed URL from Supabase bucket
+  useEffect(() => {
+    const loadModel = async () => {
+      const { data, error } = await supabase.storage
+        .from("files")
+        .createSignedUrl("ESP.glb", 600); // 10-minute signed link
+
+      if (error) {
+        console.error("Error loading model:", error.message);
+      } else {
+        setModelUrl(data.signedUrl);
+      }
+    };
+
+    loadModel();
+  }, []);
+
+  if (!modelUrl) {
+    return (
+      <div className="w-full h-[450px] flex items-center justify-center bg-[#001a1f] text-gray-400 rounded-2xl">
+        Loading 3D Model...
+      </div>
+    );
+  }
+
   return (
     <div className="w-full h-[450px] rounded-2xl bg-gradient-to-br from-[#000e0f]/80 via-[#001a1f]/60 to-[#001a33]/90 border border-teal-400/20 shadow-[0_0_30px_rgba(0,255,200,0.15)] backdrop-blur-md">
       <Canvas
@@ -63,7 +91,7 @@ export default function ModelCanvas() {
         <ambientLight intensity={0.8} color={"#aaffff"} />
         <directionalLight position={[3, 3, 2]} intensity={1.4} color={"#00aaff"} />
         <directionalLight position={[-3, -3, -2]} intensity={0.6} color={"#00ffaa"} />
-        <ESP32Model />
+        <ESP32Model modelUrl={modelUrl} />
         <fog attach="fog" args={["#000e0f", 4, 10]} />
         <OrbitControls enableZoom enablePan enableRotate />
       </Canvas>

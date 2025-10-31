@@ -1,0 +1,243 @@
+.resume-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  background: #0b0b0b;
+  padding-top: 80px;
+}
+
+.resume-frame {
+  border-radius: 16px;
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+}
+
+.download-btn {
+  margin-top: 20px;
+  color: white;
+  background: linear-gradient(90deg, #0072ff, #00c6ff);
+  padding: 10px 20px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.download-btn:hover {
+  transform: scale(1.05);
+}
+
+
+.react-pdf__Page__textContent {
+  display: none;
+}
+
+.react-pdf__Page__annotations {
+  display: none;
+}
+
+
+.resume-container {
+  scroll-behavior: smooth;
+}
+
+.resume-frame {
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.pdf-page {
+  margin: 10px auto;
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+@media (max-width: 768px) {
+  .pdf-page {
+    width: 95%;
+  }
+}
+
+@media (max-width: 480px) {
+  .pdf-page {
+    width: 100%;
+  }
+}
+
+
+
+/* ==============================
+   Resume Viewer Styling
+   ============================== */
+
+.resume-container {
+  scroll-behavior: smooth;
+  min-height: 100vh;
+  background: linear-gradient(180deg, #000d12 0%, #001a24 100%);
+  color: white;
+}
+
+.resume-frame {
+  max-height: 90vh;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #3b82f6 #001a24;
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.resume-frame::-webkit-scrollbar {
+  width: 8px;
+}
+
+.resume-frame::-webkit-scrollbar-track {
+  background: #001a24;
+}
+
+.resume-frame::-webkit-scrollbar-thumb {
+  background-color: #3b82f6;
+  border-radius: 10px;
+}
+
+.pdf-page {
+  margin: 10px auto;
+  display: block;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(59, 130, 246, 0.1);
+  transition: transform 0.2s ease;
+}
+
+.pdf-page:hover {
+  transform: scale(1.01);
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .pdf-page {
+    width: 95%;
+  }
+}
+
+@media (max-width: 768px) {
+  .pdf-page {
+    width: 100%;
+    margin: 5px auto;
+  }
+}
+
+/* ==============================
+   Download Button
+   ============================== */
+
+.download-btn {
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+}
+
+.download-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
+}
+
+/* ==============================
+   Download Popup Styling
+   ============================== */
+
+.popup-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 10, 20, 0.8);
+  backdrop-filter: blur(8px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.25s ease-out;
+}
+
+.popup-content {
+  background: #002133;
+  border: 2px solid #3b82f6;
+  border-radius: 1rem;
+  padding: 2rem 2.5rem;
+  text-align: center;
+  color: #e0f2fe;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 0 30px rgba(59, 130, 246, 0.3);
+  animation: slideUp 0.3s ease-out;
+}
+
+.popup-content h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #60a5fa;
+  margin-bottom: 0.75rem;
+}
+
+.popup-content p {
+  font-size: 1rem;
+  color: #cbd5e1;
+  margin-bottom: 1.5rem;
+}
+
+.popup-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.popup-btn {
+  padding: 0.6rem 1.3rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.25s ease;
+}
+
+.popup-btn.download {
+  background: #3b82f6;
+  color: white;
+}
+
+.popup-btn.download:hover {
+  background: #2563eb;
+  box-shadow: 0 0 10px rgba(37, 99, 235, 0.5);
+}
+
+.popup-btn.close {
+  background: #475569;
+  color: white;
+}
+
+.popup-btn.close:hover {
+  background: #334155;
+}
+
+/* ==============================
+   Animations
+   ============================== */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    backdrop-filter: blur(0px);
+  }
+  to {
+    opacity: 1;
+    backdrop-filter: blur(8px);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0.6;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}

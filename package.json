@@ -12,10 +12,13 @@
   "dependencies": {
     "@react-three/drei": "^10.7.6",
     "@react-three/fiber": "^9.4.0",
+    "@supabase/supabase-js": "^2.78.0",
     "framer-motion": "^12.23.24",
     "lucide-react": "^0.548.0",
+    "pdfjs-dist": "^5.4.296",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
+    "react-pdf": "^10.2.0",
     "react-router-dom": "^7.9.5",
     "three": "^0.180.0"
   },
