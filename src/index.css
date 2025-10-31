@@ -1,85 +1,278 @@
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+/* =========================================
+   Tailwind import (v4)
+   ========================================= */
+@import "tailwindcss";
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+/* =========================================
+   Fonts (load early)
+   ========================================= */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Orbitron:wght@500;700&display=swap");
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+/* =========================================
+   CSS Variables (theme)
+   ========================================= */
+:root{
+  --bg-1: #010b13;           /* deep navy */
+  --bg-2: #001124;           /* darker gradient */
+  --accent: #00c9a7;         /* techy green-cyan */
+  --accent-2: #00a8ff;       /* techy blue */
+  --muted: #9bdfe5;          /* muted text */
+  --text: #eafcff;           /* primary text */
+  --glass: rgba(255,255,255,0.03);
+  --nav-height: 64px;        /* navbar height used for offsets */
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
+/* =========================================
+   Global reset & box sizing
+   ========================================= */
+*,
+*::before,
+*::after { box-sizing: border-box; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+html, body, #root { height: 100%; width: 100%; }
+html { scroll-behavior: smooth; }
 
+/* Remove default margins / prevent accidental whitespace */
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
+  padding: 0;
   min-height: 100vh;
+  background: radial-gradient(1200px 600px at 10% 10%, rgba(0,40,60,0.12), transparent 8%),
+              linear-gradient(180deg, var(--bg-1) 0%, var(--bg-2) 100%);
+  color: var(--text);
+  font-family: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  -webkit-text-size-adjust: 100%;
+  overflow-x: hidden; /* critical to avoid horizontal white gap */
+  -webkit-overflow-scrolling: touch;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+/* Make images, canvases and svgs block-level and responsive */
+img, picture, svg, canvas {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  image-rendering: optimizeQuality;
 }
 
-button {
-  border-radius: 8px;
+/* Anchor defaults */
+a { color: var(--accent); text-decoration: none; }
+a:hover { color: var(--accent-2); }
+
+/* Headings */
+h1,h2,h3,h4,h5 {
+  margin: 0;
+  color: var(--text);
+  font-family: "Orbitron", "Poppins", sans-serif;
+  letter-spacing: -0.015em;
+}
+
+/* Paragraphs */
+p { margin: 0; color: var(--muted); line-height: 1.6; }
+
+/* Buttons baseline */
+button { font-family: inherit; cursor: pointer; }
+
+/* Remove focus outlines, replace with accessible ring */
+:focus { outline: none; }
+:focus-visible { outline: none; box-shadow: 0 0 0 4px rgba(0,200,170,0.12); border-radius: 8px; }
+
+/* =========================================
+   Utility helpers
+   ========================================= */
+
+/* container that centers and caps width for large screens */
+.container {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  max-width: 1240px;
+}
+
+/* full-bleed section with safe horizontal padding */
+.section {
+  width: 100%;
+  padding-top: 3.5rem;
+  padding-bottom: 3.5rem;
+}
+
+/* hero helper to keep hero vertically centered and no overflow */
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - var(--nav-height));
+  width: 100%;
+  padding: 2rem 1rem;
+}
+
+/* make the layout grid consistent and avoid gap overflow */
+.grid-responsive {
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 768px) {
+  .grid-responsive { grid-template-columns: 1fr 1fr; align-items: center; }
+}
+
+/* keep element within safe visual bounds to avoid scrollbars */
+.safe-frame {
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+/* buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.1rem;
+  border-radius: 12px;
+  font-weight: 600;
+  transition: transform 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
   border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
+  -webkit-tap-highlight-color: transparent;
 }
-button:hover {
-  border-color: #646cff;
+.btn-primary {
+  background: linear-gradient(180deg, var(--accent), var(--accent-2));
+  color: #001217;
+  box-shadow: 0 8px 28px rgba(0,170,200,0.12), inset 0 -2px 6px rgba(0,0,0,0.12);
 }
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+.btn-outline {
+  background: transparent;
+  color: var(--text);
+  border-color: rgba(255,255,255,0.06);
+}
+.btn:hover { transform: translateY(-3px); }
+.btn:active { transform: translateY(0); }
+
+/* small text helpers */
+.muted { color: var(--muted); }
+.kicker { text-transform: uppercase; font-size: 0.72rem; letter-spacing: 0.12em; color: rgba(255,255,255,0.55); }
+
+/* =========================================
+   Navbar (fixed) - prevents content being hidden
+   ========================================= */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--nav-height);
+  display: flex;
+  align-items: center;
+  z-index: 60;
+  padding: 0 1rem;
+  background: linear-gradient(180deg, rgba(1,8,12,0.6), rgba(1,8,12,0.35));
+  border-bottom: 1px solid rgba(0,160,200,0.06);
+  backdrop-filter: blur(6px);
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+/* when using a fixed navbar, offset main content to avoid overlap */
+.main-content {
+  padding-top: calc(var(--nav-height) + 1rem);
 }
 
+/* logo in navbar - keep small and crisp */
+.nav-logo {
+  height: 44px;
+  width: 44px;
+  display: inline-block;
+  image-rendering: crisp-edges;
+  object-fit: contain;
+  border-radius: 8px;
+}
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* menu links container */
+.nav-links { display: flex; gap: 1.25rem; align-items: center; }
 
-/* PCB-inspired background */
-body {
-  background-color: #011b10;
-  background-image: 
-    radial-gradient(circle at 1px 1px, #00ff99 1px, transparent 0),
-    linear-gradient(90deg, rgba(0,255,120,0.05) 1px, transparent 1px),
-    linear-gradient(180deg, rgba(0,255,120,0.05) 1px, transparent 1px);
-  background-size: 40px 40px, 80px 80px, 80px 80px;
-  font-family: 'Poppins', sans-serif;
-  color: white;
+/* collapse behavior (simple) */
+@media (max-width: 640px) {
+  .nav-links { display: none; } /* you'll implement mobile menu separately */
+}
+
+/* =========================================
+   3D Canvas / Model area adjustments
+   ========================================= */
+.model-wrap {
+  width: 100%;
+  height: 420px;
+  max-height: 70vh;
+  min-height: 300px;
+  border-radius: 18px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, rgba(0,0,0,0.35), rgba(0,0,0,0.5));
+  border: 1px solid rgba(0,160,200,0.06);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.02);
+}
+
+/* ensure canvas or webgl fills wrapper without generating whitespace */
+.model-wrap canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block !important;
+}
+
+/* small screens slightly reduce canvas height */
+@media (max-width: 640px) {
+  .model-wrap { height: 320px; min-height: 220px; }
+}
+
+/* =========================================
+   Footer
+   ========================================= */
+.site-footer {
+  padding: 2rem 1rem;
+  text-align: center;
+  color: rgba(255,255,255,0.65);
+  font-size: 0.95rem;
+}
+
+/* =========================================
+   Accessibility tweaks
+   ========================================= */
+.visually-hidden { position: absolute !important; height: 1px; width: 1px; overflow: hidden; clip: rect(1px, 1px, 1px, 1px); white-space: nowrap; }
+
+/* =========================================
+   Fix common whitespace causes on large screens
+   ========================================= */
+/* Prevent sub-pixel rounding gaps by guaranteeing full-bleed content uses transform */
+.full-bleed {
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+}
+
+/* Clamp text sizes for large screens to avoid wrapping anomalies */
+h1 { font-size: clamp(1.875rem, 3.6vw, 3.5rem); }
+h2 { font-size: clamp(1.25rem, 2.6vw, 2rem); }
+p  { font-size: clamp(0.95rem, 1.6vw, 1.05rem); }
+
+/* =========================================
+   Performance: reduce repaints by using will-change
+   ========================================= */
+.model-wrap, .btn, .nav-logo { will-change: transform, opacity; }
+
+/* =========================================
+   Small utility classes (handy)
+   ========================================= */
+.flex-center { display:flex; align-items:center; justify-content:center; }
+.space-x-4 > * + * { margin-left: 1rem; }
+.mb-6 { margin-bottom: 1.5rem; }
+.mt-6 { margin-top: 1.5rem; }
+
+/* =========================================
+   End: ensure no white gap on mac/windows scaling
+   ========================================= */
+@media (min-resolution: 2dppx) {
+  body { background-size: 80px 80px, 160px 160px, 160px 160px; }
 }
