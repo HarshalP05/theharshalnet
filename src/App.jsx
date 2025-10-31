@@ -1,17 +1,23 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
-import ResumeViewer from "./components/ResumeViewer"; // (we’ll make this next)
-import Projects from "./components/Projects"; // optional placeholder
-import Contact from "./components/Contact";   // optional placeholder
-import Achievements from "./components/Achievements"; // optional placeholder
+import ResumeViewer from "./components/ResumeViewer";
+import Projects from "./components/Projects";
+import Contact from "./components/Contact";
+import Achievements from "./components/Achievements";
+import Footer from "./components/Footer"; // ✅ Add footer
 
 function App() {
   return (
     <Router>
-      <div className="text-white font-sans min-h-screen bg-transparent pt-[calc(var(--nav-height)+4px)]">
+    {/* ===== PAGE LAYOUT ===== */}
+  <div className="flex flex-col min-h-screen text-white font-sans bg-transparent">
+        
+        {/* ===== NAVBAR (Fixed) ===== */}
         <Navbar />
-        <div>
+
+    {/* ===== MAIN CONTENT ===== */}
+  <main className="grow pt-[calc(var(--nav-height)+2px)]">
           <Routes>
             <Route path="/" element={<Hero />} />
             <Route path="/projects" element={<Projects />} />
@@ -19,7 +25,10 @@ function App() {
             <Route path="/contact" element={<Contact />} />
             <Route path="/resume" element={<ResumeViewer />} />
           </Routes>
-        </div>
+        </main>
+
+        {/* ===== FOOTER (Always bottom) ===== */}
+        <Footer />
       </div>
     </Router>
   );

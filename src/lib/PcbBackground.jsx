@@ -50,8 +50,11 @@ export default function PcbBackground() {
 
     function setCanvasSize() {
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      canvas.width = Math.floor(width * dpr);
-      canvas.height = Math.floor(height * dpr);
+      // Add 2px overscan in each dimension to avoid subpixel seam lines at edges
+      const cssW = width + 2;
+      const cssH = height + 2;
+      canvas.width = Math.ceil(cssW * dpr);
+      canvas.height = Math.ceil(cssH * dpr);
       ctx.setTransform(1, 0, 0, 1, 0, 0);
       ctx.scale(dpr, dpr);
       lastSize.current = { w: width, h: height };
@@ -96,7 +99,9 @@ export default function PcbBackground() {
     function drawPCB() {
       if (!isActive) return; // don't draw when inactive
 
-      ctx.clearRect(0, 0, width, height);
+  // Paint a solid base first with slight overscan to avoid any seam showing through
+  ctx.fillStyle = "#00090f"; // deeper navy base to darken overall theme
+  ctx.fillRect(-2, -2, width + 4, height + 4);
 
       // --- Draw Connections (traces) ---
       const now = performance.now();
@@ -118,8 +123,8 @@ export default function PcbBackground() {
           const x2 = b.x * gridSize;
           const y2 = b.y * gridSize;
           // Soft shimmer
-          const shimmer = prefersReduced ? 0.6 : 0.4 + 0.6 * Math.sin((x1 + y1 + t * 80) * 0.003 + t * 1.6);
-          ctx.strokeStyle = `rgba(44, 227, 103, ${0.16 + shimmer * 0.18})`;
+        const shimmer = prefersReduced ? 0.6 : 0.4 + 0.6 * Math.sin((x1 + y1 + t * 80) * 0.003 + t * 1.6);
+          ctx.strokeStyle = `rgba(44, 227, 103, ${0.12 + shimmer * 0.14})`;
           ctx.lineWidth = 3;
           ctx.beginPath();
           ctx.moveTo(x1, y1);
@@ -134,8 +139,8 @@ export default function PcbBackground() {
           const y1 = prev.y * gridSize;
           const x2 = head.x * gridSize;
           const y2 = head.y * gridSize;
-          ctx.strokeStyle = `rgba(210, 252, 125, ${prefersReduced ? 0.18 : 0.24})`;
-          ctx.lineWidth = 3.8;
+          ctx.strokeStyle = `rgba(210, 252, 125, ${prefersReduced ? 0.16 : 0.20})`;
+          ctx.lineWidth = 3.6;
           ctx.beginPath();
           ctx.moveTo(x1, y1);
           ctx.lineTo(x2, y2);
@@ -144,9 +149,9 @@ export default function PcbBackground() {
       }
 
       // --- Draw Nodes (pads) ---
-      const nodePulse = prefersReduced ? 0.8 : (0.6 + 0.4 * Math.sin(t * 2.2));
-      const outerAlpha = 0.14 + nodePulse * 0.16;
-      const innerAlpha = (outerAlpha * 0.5);
+  const nodePulse = prefersReduced ? 0.7 : (0.55 + 0.35 * Math.sin(t * 2.2));
+  const outerAlpha = 0.10 + nodePulse * 0.12;
+  const innerAlpha = (outerAlpha * 0.45);
       ctx.beginPath(); // batch path to reduce state churn
       for (let i = 0; i < nodesRef.current.length; i++) {
         const { px, py } = nodesRef.current[i];
@@ -170,8 +175,8 @@ export default function PcbBackground() {
 
     // --- Responsive Resize ---
     const handleResize = () => {
-      width = window.innerWidth;
-      height = window.innerHeight;
+  width = window.innerWidth;
+  height = window.innerHeight;
       setCanvasSize();
       const gridX = Math.ceil(width / gridSize) + 3;
       const gridY = Math.ceil(height / gridSize) + 3;
@@ -199,7 +204,8 @@ export default function PcbBackground() {
   return (
     <canvas
       ref={canvasRef}
-      className="fixed inset-0 w-screen h-screen z-0 pointer-events-none"
+  className="fixed z-0 pointer-events-none w-full h-full"
+  style={{ inset: "-2px" }}
       aria-hidden="true"
     />
   );
