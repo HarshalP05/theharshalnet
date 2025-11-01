@@ -5,48 +5,44 @@ export default function Navbar() {
     <nav className="navbar">
       <div className="container flex items-center justify-between">
         
-        {/* Logo + Name */}
+        {/* Logo + Tagline */}
         <a href="/" className="flex items-center space-x-3">
           <img
             src="/logo.png"
             alt="HP Logo"
             className="nav-logo"
           />
-          <span className="text-xl font-bold hidden sm:block tracking-wide" style={{color:"var(--muted)"}}>
-            Harshal Patil
+          <span
+            className="hidden sm:block text-sm font-semibold tracking-wider uppercase bg-clip-text text-transparent bg-gradient-to-r from-teal-400 to-cyan-300"
+          >
+            Build. Deploy. Innovate.
           </span>
         </a>
 
         {/* Desktop Navigation */}
-        <div className="hidden sm:flex items-center space-x-6 font-medium" style={{color:"var(--muted)"}}>
-          <a
-            href="/projects"
-            className="hover:text-cyan-300 transition-colors"
-          >
-            Projects
+        <div
+          className="hidden sm:flex items-center space-x-6 font-medium"
+          style={{ color: "var(--muted)" }}
+        >
+          <a href="/about-me" className="hover:text-cyan-300 transition-colors">
+            About Me
           </a>
 
-          <a
-            href="/achievements"
-            className="hover:text-cyan-300 transition-colors"
-          >
-            Achievements
+          <a href="/about-site" className="hover:text-cyan-300 transition-colors">
+            About the Site
           </a>
 
-          <a
-            href="/contact"
-            className="hover:text-cyan-300 transition-colors"
-          >
-            Contact
+          <a href="/schedule-meet" className="hover:text-cyan-300 transition-colors">
+            Schedule a Meet
           </a>
 
-          {/* NEW Resume Link */}
+          {/* Resume Button */}
           <a href="/resume" className="btn btn-outline">
             Resume
           </a>
         </div>
 
-        {/* Mobile Menu Button */}
+        {/* Mobile Menu */}
         <MobileMenu />
       </div>
     </nav>
@@ -82,25 +78,46 @@ function MobileMenu() {
           className="w-5 h-5"
         >
           {open ? (
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" d="M6 18L18 6M6 6l12 12" />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="1.8"
+              d="M6 18L18 6M6 6l12 12"
+            />
           ) : (
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" d="M3.75 6.75h16.5M3.75 12h16.5M3.75 17.25h16.5" />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="1.8"
+              d="M3.75 6.75h16.5M3.75 12h16.5M3.75 17.25h16.5"
+            />
           )}
         </svg>
       </button>
 
-      {/* Slide-down menu */}
+      {/* Mobile Dropdown */}
       <div
         id="mobile-nav"
         className={`absolute left-0 right-0 top-[64px] origin-top bg-black/80 backdrop-blur-md border-b border-white/10 ${
-          open ? "scale-y-100 opacity-100" : "scale-y-95 opacity-0 pointer-events-none"
+          open
+            ? "scale-y-100 opacity-100"
+            : "scale-y-95 opacity-0 pointer-events-none"
         } transition-transform duration-200 ease-out`}
       >
-        <div className="px-4 py-3 space-y-2" style={{color:"var(--muted)"}}>
-          <a href="/projects" className="block px-3 py-2 rounded-md hover:bg-white/10">Projects</a>
-          <a href="/achievements" className="block px-3 py-2 rounded-md hover:bg-white/10">Achievements</a>
-          <a href="/contact" className="block px-3 py-2 rounded-md hover:bg-white/10">Contact</a>
-          <a href="/resume" className="block px-3 py-2 rounded-md btn-outline" style={{display:"block", textAlign:"center"}}>
+        <div className="px-4 py-3 space-y-2" style={{ color: "var(--muted)" }}>
+          <a href="/about-me" className="block px-3 py-2 rounded-md hover:bg-white/10">
+            About Me
+          </a>
+          <a href="/about-site" className="block px-3 py-2 rounded-md hover:bg-white/10">
+            About the Site
+          </a>
+          <a href="/schedule-meet" className="block px-3 py-2 rounded-md hover:bg-white/10">
+            Schedule a Meet
+          </a>
+          <a
+            href="/resume"
+            className="block px-3 py-2 rounded-md btn-outline text-center"
+          >
             Resume
           </a>
         </div>
