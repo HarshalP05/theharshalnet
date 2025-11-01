@@ -6,7 +6,7 @@ import AboutMe from "./components/AboutMe";         // 🆕 New route
 import AboutSite from "./components/AboutSite";     // 🆕 New route
 import ScheduleMeet from "./components/ScheduleMeet"; // 🆕 New route
 import Footer from "./components/Footer";
-
+import Projects from "./components/Projects";
 function App() {
   return (
     <Router>
@@ -24,6 +24,7 @@ function App() {
             <Route path="/about-site" element={<AboutSite />} />
             <Route path="/schedule-meet" element={<ScheduleMeet />} />
             <Route path="/resume" element={<ResumeViewer />} />
+            <Route path="/projects" element={<Projects />} />
           </Routes>
         </main>
 
